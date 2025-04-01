@@ -52,18 +52,28 @@ insert into juegoyusuario values
 
 /*A)Cuántos juegos tiene asignados cada usuario*/
 select username, count(id_juego)
-from juegoyusuario
-left join usuario
+from usuario
+left join juegoyusuario
 on usuario.id_usuario = juegoyusuario.id_usuario
-group by juegoyusuario.id_usuario;
+group by usuario.id_usuario;
 
 /*B)Queremos saber todos los juegos que tenemos, y a qué usuarios pertenecen*/
-select ifnull(nombre_juego,"No tiene juegos"), username as "Dueño"
-from juegoyusuario
-right join juego
+select nombre_juego, username
+from juego
+left join juegoyusuario
 on juegoyusuario.id_juego=juego.id_juego
-right join usuario
+left join usuario
 on juegoyusuario.id_usuario=usuario.id_usuario;
+
+/*C)Mostrar todos los usuarios que tienen asignados al menos un juego*/
+select username
+from usuario
+right join juegoyusuario
+on usuario.id_usuario = juegoyusuario.id_usuario
+group by juegoyusuario.id_usuario
+having count(id_juego) > 1;
+
+
 
 
 
