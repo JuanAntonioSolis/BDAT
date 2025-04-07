@@ -18,7 +18,7 @@ stock float,
 minimo float,
 check (precio>0),
 primary key(codigo)
-)engine = InnoDB;
+)engine=InnoDB;
 
 create table factura(
 numero int,
