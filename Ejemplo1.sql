@@ -21,4 +21,5 @@ foreign key (identificadorEstacion) references estacion(identificador) on delete
 
 describe estacion;
 describe muestra;
+describe muestra;
 
