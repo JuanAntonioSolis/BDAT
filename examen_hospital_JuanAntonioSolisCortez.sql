@@ -191,19 +191,16 @@ entre el número de doctores de la clínica.*/
 select clinica.Nombre
 from clinica, participa, investigacion, doctor
 where clinica.IdClinica = investigacion.IdClinica
-and investigacion.IdInvestigacion = participa.IdInvestigacion;
+and doctor.IdClinica = clinica.IdClinica
+and investigacion.IdInvestigacion = participa.IdInvestigacion
+group by doctor.IdClinica
+having sum(horas) / count(doctor.IdClinica) = (select (sum(horas) / count(doctor.IdClinica)) 
+						from participa, clinica, doctor
+                        where clinica.IdClinica = doctor.idClinica
+                        and participa.IdDoctor = doctor.IdDoctor
+                        group by doctor.IdClinica
+                        order by 1 desc limit 1);
 
-select sum(horas), IdClinica
-from participa, investigacion
-where participa.IdInvestigacion = investigacion.IdInvestigacion
-group by IdClinica;
-
-create view doctoresPorClinica (IdClinica) as
-select count(doctor.IdClinica) as "Numero de doctores trabajando"
-from clinica, doctor
-where clinica.IdClinica = doctor.IdClinica
-group by doctor.IdClinica;
-/*Sin hacer*/
 
 /*14. Listado de todos los doctores. En el listado debe aparecer el nombre de los doctores,
 nombres de sus clínicas y nombres de las investigaciones en las que participan. Los
@@ -239,20 +236,33 @@ where investigacion.IdClinica = clinica.IdClinica
 and investigacion.Nombre like '%Neuro%';
 
 /*18.Asignar al doctor Javier Romero a la clínica que más gasta en sueldos.*/
-/*select clinica.IdClinica
+
+create view clinicaSueldo as
+select clinica.Nombre
 from clinica, doctor
 where clinica.IdClinica = doctor.IdClinica
 group by clinica.IdClinica
 having sum(salario)
-order by 1 desc limit 1;*/
+order by sum(salario) desc limit 1;
 
+select * from clinicaSueldo;
+
+update doctor set IdClinica = (select IdClinica
+								from clinica 
+                                where clinica.Nombre = (select * from clinicaSueldo))
+where Nombre = "Javier Romero";
+
+select * from doctor;
 
 /*19.Eliminar todas las clínicas sin ningún doctor asignado.*/
-/*select clinica.IdClinica 
-from doctor, clinica
-where doctor.IdClinica = clinica.IdClinica;*/
 
-/*20.Asignar a todos los doctores de la clínica 02 a la investigación SAL.*/
+delete from clinica where idClinica not in (select distinct idClinica
+										from doctor
+                                        where idClinica is not null);                                        
+select * from clinica;
+
+
+
 
 
 
