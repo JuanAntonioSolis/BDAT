@@ -162,6 +162,17 @@ select * from departamento;
  end
  $$
  call borrarDepCero();
+ 
+/*Funciones sin sentencias SQL*/
+/*1. Escribe una función que devuelva true o false si un número es divisible por otro.*/
+delimiter $$
+drop function if exists divisible $$
+create function divisible(num1 int, num2 int)
+begin
+end
+$$
+select divisible(10,4);
+
 
 											
  
