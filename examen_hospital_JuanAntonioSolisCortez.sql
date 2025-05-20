@@ -250,7 +250,7 @@ select * from clinicaSueldo;
 update doctor set IdClinica = (select IdClinica
 								from clinica 
                                 where clinica.Nombre = (select * from clinicaSueldo))
-where Nombre = "Javier Romero";
+where Nombre = "Javier Romero"; 
 
 select * from doctor;
 
