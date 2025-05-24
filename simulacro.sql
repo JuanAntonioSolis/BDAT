@@ -196,10 +196,18 @@ select presupuesto_total_proyectos(2);
 delimiter $$
 drop function if exists mejor_pagado_nombre $$
 create function mejor_pagado_nombre (idDep int)
-returns varchar(50)
+returns varchar(50) deterministic
 begin
+	declare mejor varchar(50);
+    set mejor = (select max(nombre)
+				from empleados
+                where id_departamento=idDep
+                group by salario
+                order by 1 limit 1);
+    return mejor;
 end
 $$
+select mejor_pagado_nombre(2);
 
 
 
