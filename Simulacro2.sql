@@ -145,7 +145,50 @@ $$
 
 call calcular_pagos_pendientes();
 
-/**/
+/*15. Escriba un procedimiento llamado obtener_numero_empleados que reciba como parámetro de entrada el código de una oficina y devuelva el número de empleados que tiene.
+Escriba una sentencia SQL que realice una llamada al procedimiento realizado para comprobar que se ejecuta
+correctamente.*/
+delimiter $$
+drop procedure if exists obtener_numero_empleados $$
+create procedure obtener_numero_empleados(in codOficina VARCHAR(10))
+begin
+	select count(codigo_empleado)
+    from empleado
+    where codigo_oficina = codOficina
+    group by codigo_oficina;
+end
+$$
+
+call obtener_numero_empleados("TAL-ES");
+
+/*16. Escriba una función llamada cantidad_total_de_productos_vendidos que reciba como parámetro
+de entrada el código de un producto y devuelva la cantidad total de productos que se han vendido con 
+ese código.
+Escriba una sentencia SQL que realice una llamada a la función realizada para comprobar que se ejecuta correctamente.*/
+delimiter $$
+drop function if exists cantidad_total_de_productos_vendidos $$
+create function cantidad_total_de_productos_vendidos(codProd VARCHAR(15))
+returns int deterministic
+begin
+	declare total int;
+    set total = (select sum(cantidad)
+				 from detalle_pedido
+                 where codigo_producto = codProd
+                 group by codigo_producto);
+	return total;
+end
+$$
+
+select cantidad_total_de_productos_vendidos('OR-141');
+
+
+
+
+
+
+
+
+
 
 
 

@@ -281,6 +281,34 @@ select * from divisores;
  
  select numeroPerfecto(7);
  
+ /*9. Escribe una función para la base de datos PROFESORES que le pases el nombre
+ de un profesor y te diga si es director o no, que devuelva un valor booleano true o false.
+Usa la base de datos PROFESORES. (1 punto)*/
+delimiter $$
+
+drop function if exists esDirector $$
+create function esDirector (nomProfe varchar(30))
+returns boolean deterministic
+begin
+	declare direc boolean;
+    
+    if (nomProfe in (select director.nombre
+					 from profesores, profesores as director
+                     where profesores.cddirector = director.cdprofe)) then
+	set direc = true;
+    else
+    set direc = false;
+    end if;
+
+return direc;
+end
+$$
+
+select esDirector('EDUARDO ROJO');
+
+
+
+ 
  
  
 
